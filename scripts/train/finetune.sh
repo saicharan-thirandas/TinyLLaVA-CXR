@@ -15,11 +15,13 @@ CONV_VERSION="$7"
 VERSION="$8"
 TRAIN_RECIPE="$9"
 MODEL_MAX_LENGTH="${10}"
+OUTPUT_DIR="/data/tinyllava-checkpoint/custom-test-common-pi"
+
 
 VT_VARIANT="${VT_VERSION#*/}"
 LLM_VARIANT="${LLM_VERSION#*/}"
 
-deepspeed --include localhost:4,5,6,7 --master_port 29501 tinyllava/train/train.py \
+deepspeed --include localhost:0 --master_port 29501 tinyllava/train/train.py \
     --deepspeed ./scripts/zero3.json \
     --data_path  $DATA_PATH \
     --image_folder $IMAGE_PATH \
@@ -31,25 +33,24 @@ deepspeed --include localhost:4,5,6,7 --master_port 29501 tinyllava/train/train.
     --connector_type $CN_VERSION \
     --mm_vision_select_layer -2 \
     --image_aspect_ratio square \
-    --attn_implementation flash_attention_2 \
     --fp16 True \
     --training_recipe $TRAIN_RECIPE \
-    --tune_type_llm full \
+    --tune_type_llm lora \
     --tune_type_vision_tower frozen\
     --tune_vision_tower_from_layer 0 \
     --tune_type_connector full \
-    --group_by_modality_length True \
-    --pretrained_model_path /mnt/data/sata/yinghu/checkpoints/llava_factory/tiny-llava-${LLM_VARIANT}-${VT_VARIANT}-${VERSION}-pretrain \
-    --output_dir /mnt/data/sata/yinghu/checkpoints/llava_factory/tiny-llava-${LLM_VARIANT}-${VT_VARIANT}-${VERSION}-finetune \
+    --group_by_modality_length False \
+    --pretrained_model_path "tinyllava/TinyLLaVA-Phi-2-SigLIP-3.1B" \
+    --output_dir $OUTPUT_DIR \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 8 \
+    --per_device_train_batch_size 2 \
     --per_device_eval_batch_size 4 \
-    --gradient_accumulation_steps 4 \
+    --gradient_accumulation_steps 32 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
-    --save_steps 50000 \
+    --save_steps 5 \
     --save_total_limit 1 \
-    --learning_rate 2e-5 \
+    --learning_rate 2e-4 \
     --weight_decay 0. \
     --warmup_ratio 0.03 \
     --lr_scheduler_type "cosine" \
@@ -57,7 +58,7 @@ deepspeed --include localhost:4,5,6,7 --master_port 29501 tinyllava/train/train.
     --tf32 False \
     --model_max_length $MODEL_MAX_LENGTH \
     --gradient_checkpointing True \
-    --dataloader_num_workers 8 \
+    --dataloader_num_workers 16 \
     --lazy_preprocess True \
     --report_to tensorboard \
     --tokenizer_use_fast False \
