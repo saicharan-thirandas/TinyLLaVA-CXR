@@ -31,7 +31,7 @@ block_css = """
 }
 """
 title_markdown = """
-# TinyLLaVA: A Framework of Small-scale Large Multimodal Models
+# TinyLLaVA-CXR: Advancing Portable Chest X-Ray Diagnostics with Efficient LLM-Driven Image Reasoning
 [[Code](https://github.com/DLCV-BUAA/TinyLLaVABench)] | 📚 [[Paper](https://arxiv.org/pdf/2402.14289.pdf)]
 """
 tos_markdown = """
