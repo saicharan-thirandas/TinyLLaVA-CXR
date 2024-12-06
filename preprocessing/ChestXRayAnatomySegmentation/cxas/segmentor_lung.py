@@ -98,7 +98,7 @@ class CXAS(nn.Module):
         """
         assert os.path.isfile(filename)
         
-        output_file_path = os.path.join(os.path.basename(os.path.dirname(filename)),f'{filename.split(".")[0]}_lung.jpg')
+        output_file_path = os.path.join(os.path.basename(os.path.dirname(filename)),f'{filename[:-4]}_lung.jpg')
 
         file_dict = self.fileloader.load_file(filename)
         file_dict["filename"] = [file_dict["filename"]]
@@ -219,6 +219,7 @@ class CXAS(nn.Module):
             self.filesaver.save_prediction(
                filename, pred, output_file_path, storage_type
             )
+            print("saved to file path " + str(output_file_path))
 
     def resize_to_numpy(
         self,
