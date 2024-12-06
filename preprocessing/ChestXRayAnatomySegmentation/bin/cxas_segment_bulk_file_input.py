@@ -64,7 +64,7 @@ def main() -> None:
     args = parse_arguments()
     model = CXAS(model_name=args.model, gpus=args.gpus)
     print("Model loaded")
-    basepath="/home/thiras3/Desktop"
+    basepath="/data/mount2/mimic-cxr-jpg-2.1.0.physionet.org"
 
     input_path = Path(args.input)
 

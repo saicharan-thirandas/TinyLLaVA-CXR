@@ -3,11 +3,12 @@ import time
 from gpt4all import GPT4All
 
 # Path to the parent folder
-parent_folder = "/data/annotations/mimic-cxr-jpg/mimic-cxr-reports-qa/files/"
+parent_folder = "/data/annotations/mimic-cxr-jpg/mimic-cxr-reports-qa/files/p13"
 
 # Model name
-model_name = "Nous-Hermes-2-Mistral-7B-DPO.Q4_0.gguf"
-
+#model_name = "Nous-Hermes-2-Mistral-7B-DPO.Q4_0.gguf"
+model_name =  "Meta-Llama-3-8B-Instruct.Q4_0.gguf" 
+'''
 # Prompt template
 prompt_template = """
 You are a specialized AI assistant in interpreting chest X-ray imagery and biomedical topics.
@@ -17,6 +18,33 @@ Generate 5 questions and answers from this report in the format Q1:<question> &&
 Here is the report: 
 {}
 """
+Q6:<question> && A6:<answer>
+Q7:<question> && A7:<answer>
+Q8:<question> && A8:<answer>
+Q9:<question> && A9:<answer>
+Q10:<question> && A10:<answer>
+'''
+# Prompt template
+prompt_template = """
+You are a specialized AI assistant in interpreting chest X-ray imagery and biomedical topics.
+You will receive the final report of a chest X-ray, including sections like findings, impressions, history, and indications, though sections may vary. The actual X-ray image is not accessible.
+A radiologist will be asking you questions about the visual details of the X-ray to help interpret the image. So, be prepared to answer questions about the visual details of the X-ray, such as the presence of specific anatomical structures, abnormalities, or artifacts, etc.
+Generate 5 questions and answers from below text in the exact format:
+Q1:<question> && A1:<answer>
+Q2:<question> && A2:<answer>
+Q3:<question> && A3:<answer>
+Q4:<question> && A4:<answer>
+Q5:<question> && A5:<answer>
+
+
+Focus on FINDINGS and IMPRESSION and ignore TECHNIQUES, HISTORY
+Do not Hallucinate. Ask simpler questions such as focusing on visible abnormalities like fractures or other key findings. Do not ask question about any improvements or updates
+
+Here is the text: 
+{}
+"""
+
+
 
 # Initialize the model
 print(f"Initializing model: {model_name}")
@@ -45,7 +73,8 @@ def process_file(file_path):
     print(f"Generating output for {file_path}...")
     start_time = time.time()
     with model.chat_session():
-        output = model.generate(prompt, max_tokens=300)
+        output = model.generate(prompt, max_tokens=2048)
+
     end_time = time.time()
     
     # Save the output to the report file
