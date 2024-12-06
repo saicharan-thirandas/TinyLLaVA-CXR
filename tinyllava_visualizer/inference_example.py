@@ -2,6 +2,7 @@ from tinyllava.eval.run_tiny_llava import eval_model
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from tinyllava_visualizer.tinyllava_visualizer import *
 
+
 prompt = "What are the things I should be cautious about when I visit here?"
 image_file = "https://llava-vl.github.io/static/images/view.jpg"
 
