@@ -15,13 +15,13 @@ CONV_VERSION="$7"
 VERSION="$8"
 TRAIN_RECIPE="$9"
 MODEL_MAX_LENGTH="${10}"
-OUTPUT_DIR="/home/thiras3/workspace/TinyLLaVA-CXR/checkpoints/second-run"
+OUTPUT_DIR="/home/thiras3/llmworkspace/TinyLLaVA-CXR/checkpoints/first-qa-run"
 
 
 VT_VARIANT="${VT_VERSION#*/}"
 LLM_VARIANT="${LLM_VERSION#*/}"
 
-deepspeed --include localhost:0,1 --master_port 29501 tinyllava/train/train.py \
+deepspeed --include localhost:0 --master_port 29501 tinyllava/train/train.py \
     --deepspeed ./scripts/zero3.json \
     --data_path  $DATA_PATH \
     --image_folder $IMAGE_PATH \
@@ -35,22 +35,22 @@ deepspeed --include localhost:0,1 --master_port 29501 tinyllava/train/train.py \
     --image_aspect_ratio square \
     --fp16 True \
     --training_recipe $TRAIN_RECIPE \
-    --tune_type_llm full \
+    --tune_type_llm lora \
     --tune_type_vision_tower frozen\
     --tune_vision_tower_from_layer 0 \
-    --tune_type_connector full \
+    --tune_type_connector frozen \
     --group_by_modality_length False \
-    --pretrained_model_path "tinyllava/TinyLLaVA-Phi-2-SigLIP-3.1B" \
+    --pretrained_model_path "/data/tinyllava-checkpoint/archive/con-and-llm-full-reports/" \
     --output_dir $OUTPUT_DIR \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 4 \
-    --per_device_eval_batch_size 4 \
-    --gradient_accumulation_steps 8 \
+    --per_device_train_batch_size 1 \
+    --per_device_eval_batch_size 1 \
+    --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
-    --save_steps 100 \
-    --save_total_limit 2 \
-    --learning_rate 2e-4 \
+    --save_steps 50 \
+    --save_total_limit 1 \
+    --learning_rate 2e-5 \
     --weight_decay 0. \
     --warmup_ratio 0.03 \
     --lr_scheduler_type "cosine" \
@@ -58,7 +58,7 @@ deepspeed --include localhost:0,1 --master_port 29501 tinyllava/train/train.py \
     --tf32 False \
     --model_max_length $MODEL_MAX_LENGTH \
     --gradient_checkpointing True \
-    --dataloader_num_workers 40 \
+    --dataloader_num_workers 20 \
     --lazy_preprocess True \
     --report_to tensorboard \
     --tokenizer_use_fast False \
