@@ -1,5 +1,5 @@
 FINETUNE_DATA_PATH="/home/thiras3/workspace/TinyLLaVA-CXR/annotations/mimic-cxr-jpg/mimic_reports_train_images.json" #finetune annotation file path
-FINETUNE_IMAGE_PATH="/home/thiras3/workspace/data/mimic-cxr-jpg-2.1.0.physionet.org" #finetune image dir
+FINETUNE_IMAGE_PATH="/home/thiras3/workspace/s3bucket/mimic-cxr-jpg-2.1.0.physionet.org" #finetune image dir
 
 LLM_VERSION=microsoft/phi-2 # llm path in huggingface
 VT_VERSION=google/siglip-so400m-patch14-384 #vision tower path in huggingface

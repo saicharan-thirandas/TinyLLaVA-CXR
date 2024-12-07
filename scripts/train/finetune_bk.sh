@@ -15,7 +15,7 @@ CONV_VERSION="$7"
 VERSION="$8"
 TRAIN_RECIPE="$9"
 MODEL_MAX_LENGTH="${10}"
-OUTPUT_DIR="/home/thiras3/workspace/TinyLLaVA-CXR/checkpoints/second-run"
+OUTPUT_DIR="/home/thiras3/workspace/TinyLLaVA-CXR/checkpoints/all-unfrozen"
 
 
 VT_VARIANT="${VT_VERSION#*/}"
@@ -36,7 +36,7 @@ deepspeed --include localhost:0,1 --master_port 29501 tinyllava/train/train.py \
     --fp16 True \
     --training_recipe $TRAIN_RECIPE \
     --tune_type_llm full \
-    --tune_type_vision_tower frozen\
+    --tune_type_vision_tower full\
     --tune_vision_tower_from_layer 0 \
     --tune_type_connector full \
     --group_by_modality_length False \
@@ -48,9 +48,9 @@ deepspeed --include localhost:0,1 --master_port 29501 tinyllava/train/train.py \
     --gradient_accumulation_steps 8 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
-    --save_steps 100 \
+    --save_steps 90 \
     --save_total_limit 2 \
-    --learning_rate 2e-4 \
+    --learning_rate 2e-6 \
     --weight_decay 0. \
     --warmup_ratio 0.03 \
     --lr_scheduler_type "cosine" \
