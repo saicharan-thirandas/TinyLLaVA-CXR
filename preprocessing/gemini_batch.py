@@ -4,7 +4,7 @@ import google.generativeai as genai
 import random
 
 # Configure the Gemini API with the provided API key
-genai.configure(api_key="AIzaSyDXVNd5cAsYR2U4yL4V7nLmQHttjg2u1Ts")
+genai.configure(api_key="<API KEY>")
 model = genai.GenerativeModel("gemini-1.5-flash-8b")
 
 # Define input and output folders
