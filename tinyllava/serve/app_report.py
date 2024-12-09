@@ -31,7 +31,8 @@ block_css = """
 }
 """
 title_markdown = """
-# TinyLLaVA-CXR:  LLM-Driven Image Reasoning
+# TinyLLaVA-CXR: Report Generator LLM
+[[Code](https://github.com/saicharan-thirandas/TinyLLaVA-CXR)] 
 """
 tos_markdown = """
 ### Terms of use
@@ -234,11 +235,12 @@ def build_demo():
                     examples=[
                         [
                             f"{cur_dir}/examples/chest1.jpg",
-                            "What abnormalities can you identify in this image?",
+                            "Generate a report",
                         ],
                         [
                             f"{cur_dir}/examples/chest2.jpg",
-                            "Can you identify any fractures in this image?"                        ],
+                            "Generate a report?",
+                        ],
                     ],
                     inputs=[imagebox, textbox],
                 )
@@ -322,7 +324,7 @@ def build_demo():
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default=None)
-    parser.add_argument("--port", type=int, default=None)
+    parser.add_argument("--port", type=int, default=1234)
     parser.add_argument("--share", default=None)
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument("--conv-mode", type=str, default="phi")
